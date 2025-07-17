@@ -7,9 +7,7 @@ param adminpassword string
 module networkModule 'modules/network.bicep' = {
   name: 'network'
   params: {
-    location: location
-    FirewallPrivateIP: firewallModule.outputs.firewallprivateIP
-  }
+    location: location  }
 }
 
 module computeModule 'modules/compute.bicep' = {
@@ -17,12 +15,5 @@ module computeModule 'modules/compute.bicep' = {
   params: {
     location: location
     adminPassword: adminpassword
-  }
-}
-
-module firewallModule 'modules/firewall.bicep' = {
-  name: 'firewall'
-  params: {
-    location: location
   }
 }
