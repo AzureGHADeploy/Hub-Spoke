@@ -1,5 +1,7 @@
 param location string
 
+param FirewallPrivateIP string
+
 resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: 'HubVNET'
   location: location
@@ -32,7 +34,7 @@ resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   }
 }
 
-resource SpokeVirtualNetwork1 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+resource Spoke1VirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: 'Spoke1VNET'
   location: location
   properties: {
@@ -58,7 +60,7 @@ resource HubToSpoke1VnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
   properties: {
     allowVirtualNetworkAccess: true
     remoteVirtualNetwork: {
-      id: SpokeVirtualNetwork1.id
+      id: Spoke1VirtualNetwork.id
     }
     useRemoteGateways: false
     allowForwardedTraffic: false
@@ -68,7 +70,7 @@ resource HubToSpoke1VnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
 
 resource Spoke1ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
   name: 'Spoke1ToHubVnetPeering'
-  parent: SpokeVirtualNetwork1
+  parent: Spoke1VirtualNetwork
   properties: {
     allowVirtualNetworkAccess: true
     remoteVirtualNetwork: {
@@ -81,7 +83,7 @@ resource Spoke1ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
 }
 
 
-resource SpokeVirtualNetwork2 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+resource Spoke2VirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: 'Spoke2VNET'
   location: location
   properties: {
@@ -107,7 +109,7 @@ resource HubToSpoke2VnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
   properties: {
     allowVirtualNetworkAccess: true
     remoteVirtualNetwork: {
-      id: SpokeVirtualNetwork2.id
+      id: Spoke2VirtualNetwork.id
     }
     useRemoteGateways: false
     allowForwardedTraffic: false
@@ -117,7 +119,7 @@ resource HubToSpoke2VnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
 
 resource spoke2ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
   name: 'Spoke2ToHubVnetPeering'
-  parent: SpokeVirtualNetwork2
+  parent: Spoke2VirtualNetwork
   properties: {
     allowVirtualNetworkAccess: true
     remoteVirtualNetwork: {
@@ -126,5 +128,59 @@ resource spoke2ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
     useRemoteGateways: false
     allowForwardedTraffic: false
     allowGatewayTransit: false
+  }
+}
+
+resource Spoke1RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
+  name: 'Spoke1RouteTable'
+  location: location
+  properties: {
+    routes: [
+      {
+        name: 'RouteToHub'
+        properties: {
+          addressPrefix: Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: FirewallPrivateIP
+        }
+      }
+    ]
+  }
+}
+
+resource Spoke1RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: 'Subnet1-1'
+  parent: Spoke1VirtualNetwork
+  properties: {
+    routeTable: {
+      id: Spoke1RouteTable.id
+    }
+  }
+}
+
+resource Spoke2RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
+  name: 'Spoke2RouteTable'
+  location: location
+  properties: {
+    routes: [
+      {
+        name: 'RouteToHub'
+        properties: {
+          addressPrefix: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: FirewallPrivateIP
+        }
+      }
+    ]
+  }
+}
+
+resource Spoke2RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: 'Subnet2-1'
+  parent: Spoke2VirtualNetwork
+  properties: {
+    routeTable: {
+      id: Spoke2RouteTable.id
+    }
   }
 }
