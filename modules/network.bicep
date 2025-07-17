@@ -152,7 +152,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
     ]
     networkRuleCollections: [
       {
-        name: 'Spoke1ToSpoke2 RuleCollection'
+        name: 'Spoke1ToSpoke2RuleCollection'
         properties: {
           priority: 100
           action: {
