@@ -9,7 +9,7 @@ resource VM1inSpoke1 'Microsoft.Compute/virtualMachines@2024-07-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_DS1_v2'
+      vmSize: 'Standard_B2ms'
     }
     storageProfile: {
       imageReference: {
@@ -30,7 +30,7 @@ resource VM1inSpoke1 'Microsoft.Compute/virtualMachines@2024-07-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: resourceId('Microsoft.Network/networkInterfaces', 'VM1inSpoke1NIC')
+          id: VM1inSpoke1NIC.id
         }
       ]
     }
