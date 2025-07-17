@@ -144,6 +144,9 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
           subnet: {
             id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'HubVNET', 'AzureFirewallSubnet')
           }
+          publicIPAddress: {
+            id: resourceId('Microsoft.Network/publicIPAddresses', 'HubFirewallPublicIP')
+          }
         }
       }
     ]
@@ -185,6 +188,16 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   }
 }
 
+resource HubFirewallPublicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
+  name: 'HubFirewallPublicIP'
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
 
 resource Spoke1RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
   name: 'Spoke1RouteTable'
