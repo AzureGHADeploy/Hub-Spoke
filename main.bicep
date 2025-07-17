@@ -20,3 +20,13 @@ module computeModule 'modules/compute.bicep' = {
     adminPassword: adminpassword
   }
 }
+ module bastionModule 'modules/bastion.bicep' = {
+  name: 'bastion'
+  dependsOn: [
+    networkModule
+  ]
+  params: {
+    location: location
+  }
+}
+
