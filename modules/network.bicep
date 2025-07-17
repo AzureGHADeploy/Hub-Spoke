@@ -142,10 +142,10 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
         name: 'FirewallIpConfiguration'
         properties: {
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'HubVNET', 'AzureFirewallSubnet')
+            id: HubVirtualNetwork.properties.subnets[1].id
           }
           publicIPAddress: {
-            id: resourceId('Microsoft.Network/publicIPAddresses', 'HubFirewallPublicIP')
+            id: HubFirewallPublicIP.id
           }
         }
       }
@@ -162,7 +162,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
             {
               name: 'AllowSpoke1ToSpoke2'
               description: 'Allow traffic from Spoke1 to Spoke2'
-              protocols: ['Icmp']
+              protocols: ['ICMP']
               sourceAddresses: [
                 Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
               ]
@@ -176,7 +176,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
             {
               name: 'AllowSpoke2ToSpoke1'
               description: 'Allow traffic from Spoke2 to Spoke1'
-              protocols: ['Icmp']
+              protocols: ['ICMP']
               sourceAddresses: [
                 Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
               ]
