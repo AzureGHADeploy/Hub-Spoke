@@ -226,6 +226,7 @@ resource Spoke1RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@
   name: 'Subnet1-1'
   parent: Spoke1VirtualNetwork
   properties: {
+    addressPrefix: Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
     routeTable: {
       id: Spoke1RouteTable.id
     }
@@ -253,6 +254,7 @@ resource Spoke2RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@
   name: 'Subnet2-1'
   parent: Spoke2VirtualNetwork
   properties: {
+    addressPrefix: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
     routeTable: {
       id: Spoke2RouteTable.id
     }
