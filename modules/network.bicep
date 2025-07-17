@@ -32,8 +32,8 @@ resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   }
 }
 
-resource SpokeVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
-  name: 'SpokeVNET'
+resource SpokeVirtualNetwork1 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+  name: 'Spoke1VNET'
   location: location
   properties: {
     addressSpace: {
@@ -52,13 +52,13 @@ resource SpokeVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   }
 }
 
-resource HubToSpokeVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
-  name: 'HubToSpokeVnetPeering'
+resource HubToSpoke1VnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
+  name: 'HubToSpoke1VnetPeering'
   parent: HubVirtualNetwork
   properties: {
     allowVirtualNetworkAccess: true
     remoteVirtualNetwork: {
-      id: SpokeVirtualNetwork.id
+      id: SpokeVirtualNetwork1.id
     }
     useRemoteGateways: false
     allowForwardedTraffic: false
@@ -66,9 +66,58 @@ resource HubToSpokeVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwork
   }
 }
 
-resource SpokeToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
-  name: 'SpokeToHubVnetPeering'
-  parent: SpokeVirtualNetwork
+resource Spoke1ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
+  name: 'Spoke1ToHubVnetPeering'
+  parent: SpokeVirtualNetwork1
+  properties: {
+    allowVirtualNetworkAccess: true
+    remoteVirtualNetwork: {
+      id: HubVirtualNetwork.id
+    }
+    useRemoteGateways: false
+    allowForwardedTraffic: false
+    allowGatewayTransit: false
+  }
+}
+
+
+resource SpokeVirtualNetwork2 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+  name: 'Spoke2VNET'
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.2.0.0/16'
+      ]
+    }
+    subnets: [
+      {
+        name: 'default'
+        properties: {
+          addressPrefix: '10.2.0.0/26'
+        }
+      }
+    ]
+  }
+}
+
+resource HubToSpoke2VnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
+  name: 'HubToSpoke2VnetPeering'
+  parent: HubVirtualNetwork
+  properties: {
+    allowVirtualNetworkAccess: true
+    remoteVirtualNetwork: {
+      id: SpokeVirtualNetwork2.id
+    }
+    useRemoteGateways: false
+    allowForwardedTraffic: false
+    allowGatewayTransit: false
+  }
+}
+
+resource spoke2ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
+  name: 'Spoke2ToHubVnetPeering'
+  parent: SpokeVirtualNetwork2
   properties: {
     allowVirtualNetworkAccess: true
     remoteVirtualNetwork: {
