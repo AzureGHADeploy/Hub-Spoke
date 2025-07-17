@@ -12,6 +12,9 @@ module networkModule 'modules/network.bicep' = {
 
 module computeModule 'modules/compute.bicep' = {
   name: 'compute'
+  dependsOn: [
+    networkModule
+  ]
   params: {
     location: location
     adminPassword: adminpassword

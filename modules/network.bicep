@@ -45,7 +45,7 @@ resource Spoke1VirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
       {
         name: 'Subnet1-1'
         properties: {
-          addressPrefix: '10.1.0.0/26'
+          addressPrefix: '10.1.0.0/24'
         }
       }
     ]
@@ -94,7 +94,7 @@ resource Spoke2VirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
       {
         name: 'Subnet2-1'
         properties: {
-          addressPrefix: '10.2.0.0/26'
+          addressPrefix: '10.2.0.0/24'
         }
       }
     ]
