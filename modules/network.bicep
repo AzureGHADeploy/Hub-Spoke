@@ -163,11 +163,9 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
               name: 'AllowSpoke1ToSpoke2'
               description: 'Allow traffic from Spoke1 to Spoke2'
               protocols: ['Icmp']
-              sourceAddresses: [
-                resourceId('Microsoft.Network/virtualNetworks/subnets', 'Spoke1VNET', 'Subnet1-1')
-              ]
+              sourceAddresses: [Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix]
               destinationAddresses: [
-                resourceId('Microsoft.Network/virtualNetworks/subnets', 'Spoke2VNET', 'Subnet2-1')
+                Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
               ]
             }
             {
@@ -175,10 +173,10 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
               description: 'Allow traffic from Spoke2 to Spoke1'
               protocols: ['Icmp']
               sourceAddresses: [
-                resourceId('Microsoft.Network/virtualNetworks/subnets', 'Spoke2VNET', 'Subnet2-1')
+                Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
               ]
               destinationAddresses: [
-                resourceId('Microsoft.Network/virtualNetworks/subnets', 'Spoke1VNET', 'Subnet1-1')
+                Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
               ]
             }
           ]
