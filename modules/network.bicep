@@ -51,3 +51,31 @@ resource SpokeVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
     ]
   }
 }
+
+resource HubToSpokeVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
+  name: 'HubToSpokeVnetPeering'
+  parent: HubVirtualNetwork
+  properties: {
+    allowVirtualNetworkAccess: true
+    remoteVirtualNetwork: {
+      id: SpokeVirtualNetwork.id
+    }
+    useRemoteGateways: false
+    allowForwardedTraffic: false
+    allowGatewayTransit: false
+  }
+}
+
+resource SpokeToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2024-07-01' = {
+  name: 'SpokeToHubVnetPeering'
+  parent: SpokeVirtualNetwork
+  properties: {
+    allowVirtualNetworkAccess: true
+    remoteVirtualNetwork: {
+      id: HubVirtualNetwork.id
+    }
+    useRemoteGateways: false
+    allowForwardedTraffic: false
+    allowGatewayTransit: false
+  }
+}
