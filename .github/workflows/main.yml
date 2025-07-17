@@ -20,3 +20,4 @@ jobs:
         resourceGroupName: Hub-Spoke
         template: ./main.bicep # Path to your Bicep file
         deploymentName: Hub-Spoke-${{ github.run_number }} # Good practice for unique deployments
+        deploymentMode: complete
