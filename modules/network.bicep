@@ -1,7 +1,7 @@
 param location string
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
-  name: 'myVirtualNetwork'
+resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+  name: 'HubVNET'
   location: location
   properties: {
     addressSpace: {
@@ -26,6 +26,26 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
         name: 'GatewaySubnet'
         properties: {
           addressPrefix: '10.0.0.128/27'
+        }
+      }
+    ]
+  }
+}
+
+resource SpokeVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+  name: 'SpokeVNET'
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        '10.1.0.0/16'
+      ]
+    }
+    subnets: [
+      {
+        name: 'default'
+        properties: {
+          addressPrefix: '10.1.0.0/26'
         }
       }
     ]
