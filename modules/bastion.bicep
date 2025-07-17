@@ -3,6 +3,9 @@ param location string
 resource AzureBastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
   name: 'AzureBastion'
   location: location
+  sku: {
+    name: 'Standard'
+  }
   properties: {
     ipConfigurations: [
       {
