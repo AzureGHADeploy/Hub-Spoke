@@ -222,6 +222,29 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
         }
       }
     ]
+    natRuleCollections: [
+      {
+        name: 'NATRuleCollection'
+        properties: {
+          priority: 300
+          action: {
+            type: 'Dnat'
+          }
+          rules: [
+            {
+              name: 'AllowSSHToVM1inSpoke2'
+              description: 'NAT rule for SSH inbound traffic to VM2 in Spoke2'
+              protocols: ['SSH']
+              sourceAddresses: ['*']
+              destinationAddresses: [HubFirewallPublicIP.properties.ipAddress]
+              destinationPorts: ['22']
+              translatedAddress: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
+              translatedPort: '22'
+            }
+          ]
+        }
+      }
+    ]
   }
 }
 
