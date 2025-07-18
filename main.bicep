@@ -7,7 +7,8 @@ param adminpassword string
 module networkModule 'modules/network.bicep' = {
   name: 'network'
   params: {
-    location: location  }
+    location: location  
+  }
 }
 
 module computeModule 'modules/compute.bicep' = {

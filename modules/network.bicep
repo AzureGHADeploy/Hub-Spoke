@@ -1,5 +1,9 @@
 param location string
 
+resource existingVM2NIC 'Microsoft.Network/networkInterfaces@2024-07-01' existing = {
+  name: 'VM2inSpoke2NIC' // Must match the name from the compute module
+}
+
 resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: 'HubVNET'
   location: location
@@ -238,7 +242,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
               sourceAddresses: ['*']
               destinationAddresses: [HubFirewallPublicIP.properties.ipAddress]
               destinationPorts: ['22']
-              translatedAddress: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
+              translatedAddress: existingVM2NIC.properties.ipConfigurations[0].properties.privateIPAddress
               translatedPort: '22'
             }
           ]

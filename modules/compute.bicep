@@ -108,3 +108,4 @@ resource VM2inSpoke2NIC 'Microsoft.Network/networkInterfaces@2024-07-01' = {
     ]
   }
 }
+
