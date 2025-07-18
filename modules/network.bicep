@@ -191,6 +191,37 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
         }
       }
     ]
+    applicationRuleCollections: [
+      {
+        name: 'Allow Google Access'
+        properties: {
+          priority: 200
+          action: {
+            type: 'Allow'
+          }
+          rules: [
+            {
+              name: 'Allow Google'
+              description: 'Allow outbound Google access'
+              sourceAddresses: [ Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix ]
+              protocols: [
+                {
+                  protocolType: 'Http'
+                  port: 80
+                }
+                {
+                  protocolType: 'Https'
+                  port: 443
+                }
+              ]
+              targetFqdns: [
+                'www.google.com'                
+              ]
+            }
+          ]
+        }
+      }
+    ]
   }
 }
 
