@@ -193,7 +193,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
     ]
     applicationRuleCollections: [
       {
-        name: 'Allow Google Access'
+        name: 'Allow_Google_Access'
         properties: {
           priority: 200
           action: {
@@ -201,7 +201,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
           }
           rules: [
             {
-              name: 'Allow Google'
+              name: 'Allow_Google'
               description: 'Allow outbound Google access'
               sourceAddresses: [ Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix ]
               protocols: [
