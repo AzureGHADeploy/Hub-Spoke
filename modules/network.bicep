@@ -213,7 +213,7 @@ resource Spoke1RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
       {
         name: 'RouteToHub'
         properties: {
-          addressPrefix: Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
+          addressPrefix: '0.0.0.0/0'
           nextHopType: 'VirtualAppliance'
           nextHopIpAddress: HubFirewall.properties.ipConfigurations[0].properties.privateIPAddress
         }
@@ -241,7 +241,7 @@ resource Spoke2RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
       {
         name: 'RouteToHub'
         properties: {
-          addressPrefix: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
+          addressPrefix: '0.0.0.0/0'
           nextHopType: 'VirtualAppliance'
           nextHopIpAddress: HubFirewall.properties.ipConfigurations[0].properties.privateIPAddress
         }
