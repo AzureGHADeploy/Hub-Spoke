@@ -75,7 +75,7 @@ resource Spoke1ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
       id: HubVirtualNetwork.id
     }
     useRemoteGateways: false
-    allowForwardedTraffic: false
+    allowForwardedTraffic: true
     allowGatewayTransit: false
   }
 }
@@ -124,7 +124,7 @@ resource spoke2ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
       id: HubVirtualNetwork.id
     }
     useRemoteGateways: false
-    allowForwardedTraffic: false
+    allowForwardedTraffic: true
     allowGatewayTransit: false
   }
 }
