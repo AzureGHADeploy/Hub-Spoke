@@ -234,7 +234,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
             {
               name: 'AllowSSHToVM1inSpoke2'
               description: 'NAT rule for SSH inbound traffic to VM2 in Spoke2'
-              protocols: ['SSH']
+              protocols: ['TCP']
               sourceAddresses: ['*']
               destinationAddresses: [HubFirewallPublicIP.properties.ipAddress]
               destinationPorts: ['22']
