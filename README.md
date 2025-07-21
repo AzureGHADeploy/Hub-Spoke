@@ -50,7 +50,7 @@ cd <your-repo-directory>
 ```
 
 ### 3. Deploy the Bicep File
-Deploy the resources to the resource group you just created. You will be prompted to enter the adminPassword.
+Deploy the resources to the resource group you just created. You will be prompted to enter the `adminPassword`.
 
 #### Azure CLI
 
@@ -75,19 +75,19 @@ New-AzResourceGroupDeployment `
 ## Post-Deployment Validation
 After the deployment is complete, you can validate the setup by testing the firewall rules.
 
-**1. Find Resource IPs**: In the Azure Portal, navigate to your resource group and find the Public IP of the Azure Firewall (HubFirewallPublicIP) and the private IPs of the two VMs (VM1inSpoke1 and VM2inSpoke2).
+**1. Find Resource IPs**: In the Azure Portal, navigate to your resource group and find the Public IP of the Azure Firewall (`HubFirewallPublicIP`) and the private IPs of the two VMs (`VM1inSpoke1` and `VM2inSpoke2`).
 
 **2. Connect via Bastion**:
 
-* Go to the VM1inSpoke1 virtual machine resource in the Azure Portal.
+* Go to the `VM1inSpoke1` virtual machine resource in the Azure Portal.
 
 * Click on Connect -> Bastion.
 
-* Enter the adminUsername and adminPassword you provided during deployment to start an SSH session in your browser.
+* Enter the `adminUsername` and `adminPassword` you provided during deployment to start an SSH session in your browser.
 
 **3. Test Spoke-to-Spoke Communication (Network Rule)**:
 
-* Inside the Bastion session for VM1inSpoke1, ping the private IP of the second VM. This traffic is routed through the firewall and should be allowed by the ICMP network rule.
+* Inside the Bastion session for `VM1inSpoke1`, ping the private IP of the second VM. This traffic is routed through the firewall and should be allowed by the ICMP network rule.
 
 
 ```Bash
@@ -105,7 +105,7 @@ curl -I [www.google.com](https://www.google.com)
 ```
 **5. Test Inbound from Internet (NAT Rule)**:
 
-* From your local machine (not the Bastion session), try to SSH to VM2inSpoke2 using the Firewall's public IP address. This connection is translated by the DNAT rule on the firewall.
+* From your local machine (not the Bastion session), try to SSH to `VM2inSpoke2` using the Firewall's public IP address. This connection is translated by the DNAT rule on the firewall.
 
 
 ```Bash
