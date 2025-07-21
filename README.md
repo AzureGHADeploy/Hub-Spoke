@@ -27,6 +27,11 @@ The Bicep template will deploy the following infrastructure:
 * **VPN Gateway**: Enables hybrid connectivity between your on-premises network and Azure.
 * **Public IP Addresses**: Separate static public IPs for the Firewall, Bastion Host, and VPN Gateway.
 
+### Architecture Diagram
+
+<img width="2522" height="1593" alt="image" src="https://github.com/user-attachments/assets/c3f20013-9028-4fa3-afe2-fe7b4359e194" />
+
+
 ***
 
 ## Prerequisites
