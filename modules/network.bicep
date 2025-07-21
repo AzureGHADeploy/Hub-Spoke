@@ -308,7 +308,7 @@ resource Spoke1RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
 }
 
 resource Spoke1RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: 'Spoke1RTAssociation'
+  name: 'Subnet1-1'
   parent: Spoke1VirtualNetwork
   properties: {
     addressPrefix: Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
@@ -336,7 +336,7 @@ resource Spoke2RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
 }
 
 resource Spoke2RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: 'Spoke2RTAssociation'
+  name: 'Subnet2-1'
   parent: Spoke2VirtualNetwork
   properties: {
     addressPrefix: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
