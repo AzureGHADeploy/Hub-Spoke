@@ -1,11 +1,35 @@
+// This module deploys the network infrastructure for a Hub-Spoke architecture with Azure Firewall, VNet peering, and route tables.
+
+@description('Location for all resources' )
 param location string
 
+@description('Hub Virtual Network Name')
+param hubVnetName string = 'HubVNET'
+
+@description('Spoke 1 Virtual Network Name')
+param spoke1VnetName string = 'Spoke1VNET'
+
+@description('Spoke 2 Virtual Network Name')
+param spoke2VnetName string = 'Spoke2VNET'
+
+@description('Hub Firewall Name')
+param hubFirewallName string = 'HubFirewall'
+
+@description('Hub Firewall Public IP Name')
+param hubFirewallPublicIPName string = 'HubFirewallPublicIP'
+
+@description('Hub VNet VPN Gateway Name')
+param hubVnetVPNGatewayName string = 'HubVNetVPNGateway'
+
+@description('Hub VNet VPN Gateway Public IP Name')
+param vpnpGatewayPublicIPName string = 'HubVNetVPNGatewayPublicIP'
+
 resource existingVM2NIC 'Microsoft.Network/networkInterfaces@2024-07-01' existing = {
-  name: 'VM2inSpoke2NIC' // Must match the name from the compute module
+  name: 'VM2inSpoke2NIC' 
 }
 
 resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
-  name: 'HubVNET'
+  name: hubVnetName
   location: location
   properties: {
     addressSpace: {
@@ -37,7 +61,7 @@ resource HubVirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
 }
 
 resource Spoke1VirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
-  name: 'Spoke1VNET'
+  name: spoke1VnetName
   location: location
   properties: {
     addressSpace: {
@@ -86,7 +110,7 @@ resource Spoke1ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
 
 
 resource Spoke2VirtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
-  name: 'Spoke2VNET'
+  name: spoke2VnetName
   location: location
   properties: {
     addressSpace: {
@@ -134,7 +158,7 @@ resource spoke2ToHubVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetwor
 }
 
 resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
-  name: 'HubFirewall'
+  name: hubFirewallName
   location: location
   properties: {
     sku: {
@@ -253,7 +277,7 @@ resource HubFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
 }
 
 resource HubFirewallPublicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
-  name: 'HubFirewallPublicIP'
+  name: hubFirewallPublicIPName
   location: location
   sku: {
     name: 'Standard'
@@ -281,7 +305,7 @@ resource Spoke1RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
 }
 
 resource Spoke1RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: 'Subnet1-1'
+  name: 'Spoke1RTAssociation'
   parent: Spoke1VirtualNetwork
   properties: {
     addressPrefix: Spoke1VirtualNetwork.properties.subnets[0].properties.addressPrefix
@@ -309,12 +333,51 @@ resource Spoke2RouteTable 'Microsoft.Network/routeTables@2024-07-01' = {
 }
 
 resource Spoke2RouteTableAssociation 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: 'Subnet2-1'
+  name: 'Spoke2RTAssociation'
   parent: Spoke2VirtualNetwork
   properties: {
     addressPrefix: Spoke2VirtualNetwork.properties.subnets[0].properties.addressPrefix
     routeTable: {
       id: Spoke2RouteTable.id
     }
+  }
+}
+
+resource vpnGateway 'Microsoft.Network/virtualNetworkGateways@2024-07-01' = {
+  name: hubVnetVPNGatewayName
+  location: location
+  properties: {
+    sku: {
+      name: 'VpnGw1'
+      tier: 'VpnGw1'
+    }
+    gatewayType: 'Vpn'
+    vpnType: 'RouteBased'
+    vpnGatewayGeneration: 'Generation1'
+    ipConfigurations: [
+      {
+        name: 'vnetGatewayConfig'
+        properties: {
+          privateIPAllocationMethod: 'Dynamic'
+          subnet: {
+            id: HubVirtualNetwork.properties.subnets[2].id
+          }
+          publicIPAddress: {
+            id: vpnpGatewayPublicIP.id
+          }
+        }
+      }
+    ]
+  }
+}
+
+resource vpnpGatewayPublicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
+  name: vpnpGatewayPublicIPName
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
   }
 }
