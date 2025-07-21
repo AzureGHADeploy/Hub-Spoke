@@ -29,7 +29,8 @@ The Bicep template will deploy the following infrastructure:
 
 ### Architecture Diagram
 
-<img width="2522" height="1593" alt="image" src="https://github.com/user-attachments/assets/c3f20013-9028-4fa3-afe2-fe7b4359e194" />
+<img width="2522" height="1577" alt="image" src="https://github.com/user-attachments/assets/4679a233-ceb9-4a4a-b850-fe8de9c0ebb9" />
+
 
 
 ***
