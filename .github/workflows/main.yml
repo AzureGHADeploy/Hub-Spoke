@@ -22,4 +22,4 @@ jobs:
         deploymentName: Hub-Spoke-${{ github.run_number }} # Good practice for unique deployments
         deploymentMode: complete
         parameters: |
-          adminpassword=${{ secrets.ADMIN_PASSWORD }}
+          adminPassword=${{ secrets.ADMIN_PASSWORD }}
